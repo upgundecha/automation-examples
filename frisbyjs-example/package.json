@@ -1,0 +1,15 @@
+{
+  "name": "frisbyjs-example",
+  "version": "1.0.0",
+  "description": "REST Service Test with Frisby",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Unmesh Gundecha",
+  "license": "ISC",
+  "devDependencies": {
+    "frisby": "^2.0.16",
+    "jest": "^23.1.0"
+  }
+}
