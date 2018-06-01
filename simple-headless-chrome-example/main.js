@@ -1,7 +1,7 @@
 const HeadlessChrome = require('simple-headless-chrome')
 
 const browser = new HeadlessChrome({
-  headless: false
+  headless: true
 });
 
 async function googleSearch() {
