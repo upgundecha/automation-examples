@@ -75,3 +75,24 @@ it('should update a shipwrecks record', function () {
                 .expect('json', 'longitude', updateShip.longitude)
         })
 });
+
+it('should delete a shipwrecks record', function () {
+    return frisby
+        .post('http://localhost:9999/api/v1/shipwrecks', ship)
+        .expect('status', 200)
+        .then(function (res) {
+            let id = res.json.id;
+            return frisby.get(`http://localhost:9999/api/v1/shipwrecks/${id}`)
+                .expect('status', 200)
+                .expect('json', 'name', ship.name)
+                .expect('json', 'description', ship.description)
+                .expect('json', 'condition', ship.condition)
+                .expect('json', 'yearDiscovered', ship.yearDiscovered)
+                .expect('json', 'depth', ship.depth)
+                .expect('json', 'latitude', ship.latitude)
+                .expect('json', 'longitude', ship.longitude)
+            return frisby.
+                del(`http://localhost:9999/api/v1/shipwrecks/${id}`)
+                .expect('status', 200)
+        })
+});
