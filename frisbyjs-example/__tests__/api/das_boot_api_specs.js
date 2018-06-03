@@ -17,4 +17,9 @@ it ('should create a shipwrecks record', function () {
         longitude: "-37.302391"
       })
       .expect('status', 200)
+      .then(function (res){
+          let id = res.json.id;
+         return frisby.get(`http://localhost:9999/api/v1/shipwrecks/${id}`)
+          .expect('status', 200);
+      })
   });
