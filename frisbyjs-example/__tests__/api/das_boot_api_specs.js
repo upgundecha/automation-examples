@@ -26,7 +26,6 @@ it('should create & view a shipwrecks record', function () {
         .expect('status', 200)
         .then(function (res) {
             let id = res.json.id;
-            console.info(id)
             return frisby.get(`http://localhost:9999/api/v1/shipwrecks/${id}`)
                 .expect('status', 200)
                 .expect('json', 'name', ship.name)
