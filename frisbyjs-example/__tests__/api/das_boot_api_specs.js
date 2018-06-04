@@ -1,5 +1,7 @@
 const frisby = require('frisby')
 
+let endpoint_url = 'http://localhost:9999/api/v1';
+
 let ship = {
     name: "U Boat 66",
     description: "German U Boat 66",
@@ -10,24 +12,15 @@ let ship = {
     longitude: "-37.302391"
 }
 
-let updateShip = {
-    name: "U Boat 66",
-    description: "German U Boat 66",
-    condition: "Fair",
-    yearDiscovered: "2002",
-    depth: "1000",
-    latitude: "49.395203",
-    longitude: "-37.302391"
-}
-
 it('should create & view a shipwrecks record', function () {
     return frisby
-        .post('http://localhost:9999/api/v1/shipwrecks', ship)
+        .post(`${endpoint_url}/shipwrecks`, ship)
         .expect('status', 200)
         .then(function (res) {
             let id = res.json.id;
-            return frisby.get(`http://localhost:9999/api/v1/shipwrecks/${id}`)
+            return frisby.get(`${endpoint_url}/shipwrecks/${id}`)
                 .expect('status', 200)
+                .expect('header', 'Content-Type', 'application/json;charset=UTF-8')
                 .expect('json', 'name', ship.name)
                 .expect('json', 'description', ship.description)
                 .expect('json', 'condition', ship.condition)
@@ -39,8 +32,9 @@ it('should create & view a shipwrecks record', function () {
 });
 
 it('should get list of shipwrecks', function () {
-    return frisby.get('http://localhost:9999/api/v1/shipwrecks')
+    return frisby.get(`${endpoint_url}/shipwrecks`)
         .expect('status', 200)
+        .expect('header', 'Content-Type', 'application/json;charset=UTF-8')
         .then(function (res) {
             let ships = res.json;
             expect(ships.length).toBeGreaterThanOrEqual(1);
@@ -49,12 +43,14 @@ it('should get list of shipwrecks', function () {
 
 it('should update a shipwrecks record', function () {
     return frisby
-        .post('http://localhost:9999/api/v1/shipwrecks', ship)
+        .post(`${endpoint_url}//shipwrecks`, ship)
         .expect('status', 200)
+        .expect('header', 'Content-Type', 'application/json;charset=UTF-8')
         .then(function (res) {
             let id = res.json.id;
-            return frisby.get(`http://localhost:9999/api/v1/shipwrecks/${id}`)
+            return frisby.get(`${endpoint_url}/shipwrecks/${id}`)
                 .expect('status', 200)
+                .expect('header', 'Content-Type', 'application/json;charset=UTF-8')
                 .expect('json', 'name', ship.name)
                 .expect('json', 'description', ship.description)
                 .expect('json', 'condition', ship.condition)
@@ -62,27 +58,36 @@ it('should update a shipwrecks record', function () {
                 .expect('json', 'depth', ship.depth)
                 .expect('json', 'latitude', ship.latitude)
                 .expect('json', 'longitude', ship.longitude)
-            return frisby.
-                put(`http://localhost:9999/api/v1/shipwrecks/${id}`, updateShip)
-                .expect('status', 200)
-                .expect('json', 'name', updateShip.name)
-                .expect('json', 'description', updateShip.description)
-                .expect('json', 'condition', updateShip.condition)
-                .expect('json', 'yearDiscovered', updateShip.yearDiscovered)
-                .expect('json', 'depth', updateShip.depth)
-                .expect('json', 'latitude', updateShip.latitude)
-                .expect('json', 'longitude', updateShip.longitude)
+                .then(function (res) {
+                    let id = res.json.id;
+                    return frisby.
+                        put(`${endpoint_url}/shipwrecks/${id}`,{
+                            id: id,
+                            name: "U Boat 66",
+                            description: "German U Boat 66",
+                            condition: "Fair",
+                            yearDiscovered: "2002",
+                            depth: "1000",
+                            latitude: "49.395203",
+                            longitude: "-37.302391"
+                        })
+                        .expect('status', 200)
+                        .expect('header', 'Content-Type', 'application/json;charset=UTF-8')
+                        .expect('json', 'yearDiscovered', '2002')
+                })
         })
 });
 
 it('should delete a shipwrecks record', function () {
     return frisby
-        .post('http://localhost:9999/api/v1/shipwrecks', ship)
+        .post(`${endpoint_url}/shipwrecks`, ship)
         .expect('status', 200)
+        .expect('header', 'Content-Type', 'application/json;charset=UTF-8')
         .then(function (res) {
             let id = res.json.id;
-            return frisby.get(`http://localhost:9999/api/v1/shipwrecks/${id}`)
+            return frisby.get(`${endpoint_url}/shipwrecks/${id}`)
                 .expect('status', 200)
+                .expect('header', 'Content-Type', 'application/json;charset=UTF-8')
                 .expect('json', 'name', ship.name)
                 .expect('json', 'description', ship.description)
                 .expect('json', 'condition', ship.condition)
@@ -91,7 +96,8 @@ it('should delete a shipwrecks record', function () {
                 .expect('json', 'latitude', ship.latitude)
                 .expect('json', 'longitude', ship.longitude)
             return frisby.
-                del(`http://localhost:9999/api/v1/shipwrecks/${id}`)
+                del(`${endpoint_url}/shipwrecks/${id}`)
                 .expect('status', 200)
+                .expect('header', 'Content-Type', 'application/json;charset=UTF-8')
         })
 });
